@@ -1,0 +1,44 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="waCWOaoiq1u6D8eEoTaf" author="mike">
+        <createSequence sequenceName="phone_responses_sequence" />
+        <createSequence sequenceName="response_keywords_sequence" />
+    </changeSet>
+    <changeSet id="20vh8Wvu5NFHsyMT5Z27" author="mike">
+        <createTable tableName="phone_responses">
+            <column name="id" type="BIGINT" defaultValueSequenceNext="phone_responses_sequence">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="client_id" type="BIGINT" />
+            <column name="phone_number" type="VARCHAR(255)">
+                <constraints unique="true" />
+            </column>
+            <column name="response_message" type="TEXT" />
+            <column name="created_at" type="TIMESTAMP WITHOUT TIMEZONE" />
+        </createTable>
+        <createIndex tableName="phone_responses" indexName="idx_client_id">
+            <column name="client_id" />
+        </createIndex>
+    </changeSet>
+    <changeSet id="6dJR0ecaS79mL2m75rKl" author="mike">
+        <createTable tableName="response_keywords">
+            <column name="id" type="BIGINT" defaultValueSequenceNext="response_keywords_sequence">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="phone_response_id" type="BIGINT" />
+            <column name="keyword" type="VARCHAR(500)" />
+            <column name="created_at" type="TIMESTAMP WITHOUT TIMEZONE" />
+        </createTable>
+    </changeSet>
+    <changeSet id="9qS5qHnd0lEb9a4MOU4D" author="mike">
+        <addForeignKeyConstraint baseTableName="response_keywords"
+                                 baseColumnNames="phone_response_id"
+                                 constraintName="fk_phone_response_id"
+                                 referencedTableName="phone_responses"
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"
+        />
+    </changeSet>
+</databaseChangeLog>
+
+

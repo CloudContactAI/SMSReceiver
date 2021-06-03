@@ -1,0 +1,21 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="wYOnTwHxgqHKijpSew3O" author="mike">
+        <addColumn tableName="phone_responses">
+            <column name="action_type" type="VARCHAR(50)" defaultValue="MESSAGE" />
+        </addColumn>
+    </changeSet>
+    <changeSet id="0PXTA2K0lbjijRSfTOtM" author="mike">
+        <renameColumn tableName="phone_responses" oldColumnName="response_message" newColumnName="action_payload" />
+        <modifyDataType tableName="phone_responses" columnName="action_payload" newDataType="TEXT" />
+        <dropUniqueConstraint tableName="phone_responses" constraintName="phone_responses_phone_number_key" />
+        <dropIndex tableName="phone_responses" indexName="idx_client_id" />
+        <createIndex tableName="phone_responses" indexName="idx_client_phone_number">
+            <column name="client_id" />
+            <column name="phone_number" />
+        </createIndex>
+        <sql>
+            UPDATE phone_responses SET action_payload = CONCAT('{"message":"', action_payload, '"}')
+        </sql>
+    </changeSet>
+</databaseChangeLog>

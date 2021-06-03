@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: sms-receiver-env
+data:
+    MONGO_URI: mongodb://root:pwd@localhost:27017/cloudcontactai-incoming
+    ACTIVE_MQ_BROKER_URL: tcp://localhost:61616
+    ACTIVE_MQ_BROKER_USER: admin
+    ACTIVE_MQ_BROKER_PASSWORD: admin
+    INCOMING_SMS_QUEUE: pending-sms-messages
+    SERVER_PORT: 8086
+    SCHEMA_MODE: update
+    CORS_ALLOWED_HOSTS: *
